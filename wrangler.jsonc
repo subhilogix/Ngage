@@ -2,13 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tanstack-start-app",
   "compatibility_date": "2025-09-24",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "main": "src/server.ts",
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "ngage-db",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_name": "ngage-production",
+      "database_id": "dc7948cf-ae98-4ecf-bd1f-c4b99aceb3a8",
     },
   ],
 }
