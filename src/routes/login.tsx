@@ -137,27 +137,13 @@ function Login() {
               workspace, built for modern enterprises.
             </p>
 
-            <div className="mt-10 grid grid-cols-3 gap-3">
-              {[
-                { k: "248", v: "Employees" },
-                { k: "1,496", v: "Goals tracked" },
-                { k: "71%", v: "Avg completion" },
-              ].map((s) => (
-                <div
-                  key={s.v}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur"
-                >
-                  <p className="font-display text-2xl font-semibold">{s.k}</p>
-                  <p className="text-[10px] uppercase tracking-widest text-white/60">{s.v}</p>
-                </div>
-              ))}
-            </div>
+
           </motion.div>
 
-          <div className="flex items-center gap-3 text-xs text-white/50">
+          {/* <div className="flex items-center gap-3 text-xs text-white/50">
             <ShieldCheck className="size-4" />
             SOC 2 · ISO 27001 · Enterprise-grade SSO
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -155,14 +155,14 @@ function Signup() {
             </div>
           </motion.div>
 
-          <div className="flex items-center gap-3 text-xs text-white/50">
+          {/* <div className="flex items-center gap-3 text-xs text-white/50">
             <ShieldCheck className="size-4" />
             SOC 2 · ISO 27001 · Enterprise-grade SSO
-          </div>
+          </div> */}
         </div>
       </div>
 
-      {/* Form side */}
+      {/* Form side */}cle
       <div className="relative flex items-center justify-center bg-background px-6 py-8 overflow-y-auto">
         <div className="pointer-events-none absolute inset-0 mesh-bg opacity-40 lg:hidden" />
         <motion.div
