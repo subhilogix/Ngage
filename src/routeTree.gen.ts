@@ -13,9 +13,14 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTeamRouteImport } from './routes/_app/team'
+import { Route as AppSharedGoalsRouteImport } from './routes/_app/shared-goals'
+import { Route as AppOrgRouteImport } from './routes/_app/org'
 import { Route as AppGoalsRouteImport } from './routes/_app/goals'
+import { Route as AppEscalationsRouteImport } from './routes/_app/escalations'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppCyclesRouteImport } from './routes/_app/cycles'
 import { Route as AppCheckinsRouteImport } from './routes/_app/checkins'
+import { Route as AppAuditRouteImport } from './routes/_app/audit'
 import { Route as AppApprovalsRouteImport } from './routes/_app/approvals'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 
@@ -38,9 +43,24 @@ const AppTeamRoute = AppTeamRouteImport.update({
   path: '/team',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSharedGoalsRoute = AppSharedGoalsRouteImport.update({
+  id: '/shared-goals',
+  path: '/shared-goals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOrgRoute = AppOrgRouteImport.update({
+  id: '/org',
+  path: '/org',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGoalsRoute = AppGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEscalationsRoute = AppEscalationsRouteImport.update({
+  id: '/escalations',
+  path: '/escalations',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -48,9 +68,19 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCyclesRoute = AppCyclesRouteImport.update({
+  id: '/cycles',
+  path: '/cycles',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCheckinsRoute = AppCheckinsRouteImport.update({
   id: '/checkins',
   path: '/checkins',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAuditRoute = AppAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => AppRoute,
 } as any)
 const AppApprovalsRoute = AppApprovalsRouteImport.update({
@@ -69,9 +99,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/analytics': typeof AppAnalyticsRoute
   '/approvals': typeof AppApprovalsRoute
+  '/audit': typeof AppAuditRoute
   '/checkins': typeof AppCheckinsRoute
+  '/cycles': typeof AppCyclesRoute
   '/dashboard': typeof AppDashboardRoute
+  '/escalations': typeof AppEscalationsRoute
   '/goals': typeof AppGoalsRoute
+  '/org': typeof AppOrgRoute
+  '/shared-goals': typeof AppSharedGoalsRoute
   '/team': typeof AppTeamRoute
 }
 export interface FileRoutesByTo {
@@ -79,9 +114,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/analytics': typeof AppAnalyticsRoute
   '/approvals': typeof AppApprovalsRoute
+  '/audit': typeof AppAuditRoute
   '/checkins': typeof AppCheckinsRoute
+  '/cycles': typeof AppCyclesRoute
   '/dashboard': typeof AppDashboardRoute
+  '/escalations': typeof AppEscalationsRoute
   '/goals': typeof AppGoalsRoute
+  '/org': typeof AppOrgRoute
+  '/shared-goals': typeof AppSharedGoalsRoute
   '/team': typeof AppTeamRoute
 }
 export interface FileRoutesById {
@@ -91,9 +131,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/approvals': typeof AppApprovalsRoute
+  '/_app/audit': typeof AppAuditRoute
   '/_app/checkins': typeof AppCheckinsRoute
+  '/_app/cycles': typeof AppCyclesRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/escalations': typeof AppEscalationsRoute
   '/_app/goals': typeof AppGoalsRoute
+  '/_app/org': typeof AppOrgRoute
+  '/_app/shared-goals': typeof AppSharedGoalsRoute
   '/_app/team': typeof AppTeamRoute
 }
 export interface FileRouteTypes {
@@ -103,9 +148,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/analytics'
     | '/approvals'
+    | '/audit'
     | '/checkins'
+    | '/cycles'
     | '/dashboard'
+    | '/escalations'
     | '/goals'
+    | '/org'
+    | '/shared-goals'
     | '/team'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -113,9 +163,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/analytics'
     | '/approvals'
+    | '/audit'
     | '/checkins'
+    | '/cycles'
     | '/dashboard'
+    | '/escalations'
     | '/goals'
+    | '/org'
+    | '/shared-goals'
     | '/team'
   id:
     | '__root__'
@@ -124,9 +179,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/_app/analytics'
     | '/_app/approvals'
+    | '/_app/audit'
     | '/_app/checkins'
+    | '/_app/cycles'
     | '/_app/dashboard'
+    | '/_app/escalations'
     | '/_app/goals'
+    | '/_app/org'
+    | '/_app/shared-goals'
     | '/_app/team'
   fileRoutesById: FileRoutesById
 }
@@ -166,11 +226,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTeamRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/shared-goals': {
+      id: '/_app/shared-goals'
+      path: '/shared-goals'
+      fullPath: '/shared-goals'
+      preLoaderRoute: typeof AppSharedGoalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/org': {
+      id: '/_app/org'
+      path: '/org'
+      fullPath: '/org'
+      preLoaderRoute: typeof AppOrgRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/goals': {
       id: '/_app/goals'
       path: '/goals'
       fullPath: '/goals'
       preLoaderRoute: typeof AppGoalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/escalations': {
+      id: '/_app/escalations'
+      path: '/escalations'
+      fullPath: '/escalations'
+      preLoaderRoute: typeof AppEscalationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
@@ -180,11 +261,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/cycles': {
+      id: '/_app/cycles'
+      path: '/cycles'
+      fullPath: '/cycles'
+      preLoaderRoute: typeof AppCyclesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/checkins': {
       id: '/_app/checkins'
       path: '/checkins'
       fullPath: '/checkins'
       preLoaderRoute: typeof AppCheckinsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/audit': {
+      id: '/_app/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AppAuditRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/approvals': {
@@ -207,18 +302,28 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppApprovalsRoute: typeof AppApprovalsRoute
+  AppAuditRoute: typeof AppAuditRoute
   AppCheckinsRoute: typeof AppCheckinsRoute
+  AppCyclesRoute: typeof AppCyclesRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppEscalationsRoute: typeof AppEscalationsRoute
   AppGoalsRoute: typeof AppGoalsRoute
+  AppOrgRoute: typeof AppOrgRoute
+  AppSharedGoalsRoute: typeof AppSharedGoalsRoute
   AppTeamRoute: typeof AppTeamRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppApprovalsRoute: AppApprovalsRoute,
+  AppAuditRoute: AppAuditRoute,
   AppCheckinsRoute: AppCheckinsRoute,
+  AppCyclesRoute: AppCyclesRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppEscalationsRoute: AppEscalationsRoute,
   AppGoalsRoute: AppGoalsRoute,
+  AppOrgRoute: AppOrgRoute,
+  AppSharedGoalsRoute: AppSharedGoalsRoute,
   AppTeamRoute: AppTeamRoute,
 }
 
