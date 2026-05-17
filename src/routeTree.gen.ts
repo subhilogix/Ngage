@@ -9,11 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTeamRouteImport } from './routes/_app/team'
 import { Route as AppSharedGoalsRouteImport } from './routes/_app/shared-goals'
+import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppOrgRouteImport } from './routes/_app/org'
 import { Route as AppGoalsRouteImport } from './routes/_app/goals'
 import { Route as AppEscalationsRouteImport } from './routes/_app/escalations'
@@ -23,7 +25,15 @@ import { Route as AppCheckinsRouteImport } from './routes/_app/checkins'
 import { Route as AppAuditRouteImport } from './routes/_app/audit'
 import { Route as AppApprovalsRouteImport } from './routes/_app/approvals'
 import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
+import { Route as AppManagerDashboardRouteImport } from './routes/_app/manager.dashboard'
+import { Route as AppEmployeeDashboardRouteImport } from './routes/_app/employee.dashboard'
+import { Route as AppAdminDashboardRouteImport } from './routes/_app/admin.dashboard'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -46,6 +56,11 @@ const AppTeamRoute = AppTeamRouteImport.update({
 const AppSharedGoalsRoute = AppSharedGoalsRouteImport.update({
   id: '/shared-goals',
   path: '/shared-goals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
 const AppOrgRoute = AppOrgRouteImport.update({
@@ -93,10 +108,26 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppManagerDashboardRoute = AppManagerDashboardRouteImport.update({
+  id: '/manager/dashboard',
+  path: '/manager/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEmployeeDashboardRoute = AppEmployeeDashboardRouteImport.update({
+  id: '/employee/dashboard',
+  path: '/employee/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminDashboardRoute = AppAdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/analytics': typeof AppAnalyticsRoute
   '/approvals': typeof AppApprovalsRoute
   '/audit': typeof AppAuditRoute
@@ -106,12 +137,17 @@ export interface FileRoutesByFullPath {
   '/escalations': typeof AppEscalationsRoute
   '/goals': typeof AppGoalsRoute
   '/org': typeof AppOrgRoute
+  '/profile': typeof AppProfileRoute
   '/shared-goals': typeof AppSharedGoalsRoute
   '/team': typeof AppTeamRoute
+  '/admin/dashboard': typeof AppAdminDashboardRoute
+  '/employee/dashboard': typeof AppEmployeeDashboardRoute
+  '/manager/dashboard': typeof AppManagerDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/analytics': typeof AppAnalyticsRoute
   '/approvals': typeof AppApprovalsRoute
   '/audit': typeof AppAuditRoute
@@ -121,14 +157,19 @@ export interface FileRoutesByTo {
   '/escalations': typeof AppEscalationsRoute
   '/goals': typeof AppGoalsRoute
   '/org': typeof AppOrgRoute
+  '/profile': typeof AppProfileRoute
   '/shared-goals': typeof AppSharedGoalsRoute
   '/team': typeof AppTeamRoute
+  '/admin/dashboard': typeof AppAdminDashboardRoute
+  '/employee/dashboard': typeof AppEmployeeDashboardRoute
+  '/manager/dashboard': typeof AppManagerDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/approvals': typeof AppApprovalsRoute
   '/_app/audit': typeof AppAuditRoute
@@ -138,14 +179,19 @@ export interface FileRoutesById {
   '/_app/escalations': typeof AppEscalationsRoute
   '/_app/goals': typeof AppGoalsRoute
   '/_app/org': typeof AppOrgRoute
+  '/_app/profile': typeof AppProfileRoute
   '/_app/shared-goals': typeof AppSharedGoalsRoute
   '/_app/team': typeof AppTeamRoute
+  '/_app/admin/dashboard': typeof AppAdminDashboardRoute
+  '/_app/employee/dashboard': typeof AppEmployeeDashboardRoute
+  '/_app/manager/dashboard': typeof AppManagerDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
+    | '/signup'
     | '/analytics'
     | '/approvals'
     | '/audit'
@@ -155,12 +201,17 @@ export interface FileRouteTypes {
     | '/escalations'
     | '/goals'
     | '/org'
+    | '/profile'
     | '/shared-goals'
     | '/team'
+    | '/admin/dashboard'
+    | '/employee/dashboard'
+    | '/manager/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/signup'
     | '/analytics'
     | '/approvals'
     | '/audit'
@@ -170,13 +221,18 @@ export interface FileRouteTypes {
     | '/escalations'
     | '/goals'
     | '/org'
+    | '/profile'
     | '/shared-goals'
     | '/team'
+    | '/admin/dashboard'
+    | '/employee/dashboard'
+    | '/manager/dashboard'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/login'
+    | '/signup'
     | '/_app/analytics'
     | '/_app/approvals'
     | '/_app/audit'
@@ -186,18 +242,30 @@ export interface FileRouteTypes {
     | '/_app/escalations'
     | '/_app/goals'
     | '/_app/org'
+    | '/_app/profile'
     | '/_app/shared-goals'
     | '/_app/team'
+    | '/_app/admin/dashboard'
+    | '/_app/employee/dashboard'
+    | '/_app/manager/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -231,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/shared-goals'
       fullPath: '/shared-goals'
       preLoaderRoute: typeof AppSharedGoalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/org': {
@@ -296,6 +371,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/manager/dashboard': {
+      id: '/_app/manager/dashboard'
+      path: '/manager/dashboard'
+      fullPath: '/manager/dashboard'
+      preLoaderRoute: typeof AppManagerDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/employee/dashboard': {
+      id: '/_app/employee/dashboard'
+      path: '/employee/dashboard'
+      fullPath: '/employee/dashboard'
+      preLoaderRoute: typeof AppEmployeeDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin/dashboard': {
+      id: '/_app/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AppAdminDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -309,8 +405,12 @@ interface AppRouteChildren {
   AppEscalationsRoute: typeof AppEscalationsRoute
   AppGoalsRoute: typeof AppGoalsRoute
   AppOrgRoute: typeof AppOrgRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppSharedGoalsRoute: typeof AppSharedGoalsRoute
   AppTeamRoute: typeof AppTeamRoute
+  AppAdminDashboardRoute: typeof AppAdminDashboardRoute
+  AppEmployeeDashboardRoute: typeof AppEmployeeDashboardRoute
+  AppManagerDashboardRoute: typeof AppManagerDashboardRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -323,8 +423,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppEscalationsRoute: AppEscalationsRoute,
   AppGoalsRoute: AppGoalsRoute,
   AppOrgRoute: AppOrgRoute,
+  AppProfileRoute: AppProfileRoute,
   AppSharedGoalsRoute: AppSharedGoalsRoute,
   AppTeamRoute: AppTeamRoute,
+  AppAdminDashboardRoute: AppAdminDashboardRoute,
+  AppEmployeeDashboardRoute: AppEmployeeDashboardRoute,
+  AppManagerDashboardRoute: AppManagerDashboardRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -333,6 +437,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

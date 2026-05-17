@@ -1,4 +1,5 @@
 import * as React from "react";
+import { authApi } from "./api";
 
 export type Role = "employee" | "manager" | "admin";
 
@@ -7,73 +8,55 @@ export type AuthUser = {
   name: string;
   email: string;
   role: Role;
-  title: string;
-  department: string;
+  title?: string;
+  department?: string;
   avatar?: string;
-};
-
-const ROLE_USERS: Record<Role, AuthUser> = {
-  employee: {
-    id: "u-emp-001",
-    name: "Aarav Sharma",
-    email: "employee@company.com",
-    role: "employee",
-    title: "Senior Product Engineer",
-    department: "Platform Engineering",
-  },
-  manager: {
-    id: "u-mgr-001",
-    name: "Meera Iyer",
-    email: "manager@company.com",
-    role: "manager",
-    title: "Engineering Manager",
-    department: "Platform Engineering",
-  },
-  admin: {
-    id: "u-adm-001",
-    name: "Devika Rao",
-    email: "admin@company.com",
-    role: "admin",
-    title: "HR Operations Lead",
-    department: "People & Culture",
-  },
 };
 
 type AuthCtx = {
   user: AuthUser | null;
   ready: boolean;
-  login: (role: Role) => void;
-  logout: () => void;
+  login: (user: AuthUser) => void;
+  logout: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
 };
 
 const Ctx = React.createContext<AuthCtx | null>(null);
-
-const STORAGE_KEY = "ngage.auth.v1";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<AuthUser | null>(null);
   const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setUser(JSON.parse(raw));
-    } catch {}
-    setReady(true);
+    // Fetch current session from server on load
+    authApi
+      .getMe()
+      .then((data) => {
+        if (data && data.user) {
+          setUser(data.user);
+        }
+      })
+      .catch(() => {
+        // Ignore error, just means not logged in
+      })
+      .finally(() => {
+        setReady(true);
+      });
   }, []);
 
-  const login = React.useCallback((role: Role) => {
-    const u = ROLE_USERS[role];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(u));
+  const login = React.useCallback((u: AuthUser) => {
     setUser(u);
   }, []);
 
-  const logout = React.useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
-    setUser(null);
+  const logout = React.useCallback(async () => {
+    try {
+      await authApi.logout();
+    } finally {
+      setUser(null);
+    }
   }, []);
 
-  return <Ctx.Provider value={{ user, ready, login, logout }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ user, ready, login, logout, setUser }}>{children}</Ctx.Provider>;
 }
 
 export function useAuth() {

@@ -1,9 +1,26 @@
 import * as React from "react";
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Target, CheckSquare, Users, BarChart3, Building2,
-  CalendarRange, ShieldCheck, AlertTriangle, Bell, Search, Sun, Moon, LogOut,
-  Command, Sparkles, Share2, FileText, Plus, ClipboardCheck,
+  LayoutDashboard,
+  Target,
+  CheckSquare,
+  Users,
+  BarChart3,
+  Building2,
+  CalendarRange,
+  ShieldCheck,
+  AlertTriangle,
+  Bell,
+  Search,
+  Sun,
+  Moon,
+  LogOut,
+  Command,
+  Sparkles,
+  Share2,
+  FileText,
+  Plus,
+  ClipboardCheck,
 } from "lucide-react";
 import { useAuth, type Role } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
@@ -12,31 +29,61 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
-  DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
-  Popover, PopoverContent, PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { motion, AnimatePresence } from "framer-motion";
-import { notifications } from "@/lib/mock-data";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { notificationsApi } from "@/lib/api";
 
-type NavItem = { to: string; label: string; icon: React.ComponentType<{ className?: string }>; roles: Role[]; badge?: string };
+type NavItem = {
+  to: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  roles: Role[];
+  badge?: string;
+};
 
 const NAV: NavItem[] = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["employee", "manager", "admin"] },
+  {
+    to: "/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    roles: ["employee", "manager", "admin"],
+  },
   { to: "/goals", label: "My Goals", icon: Target, roles: ["employee"] },
   { to: "/checkins", label: "Check-ins", icon: ClipboardCheck, roles: ["employee", "manager"] },
   { to: "/approvals", label: "Approvals", icon: CheckSquare, roles: ["manager"], badge: "3" },
   { to: "/team", label: "Team", icon: Users, roles: ["manager"] },
-  { to: "/shared-goals", label: "Shared Goals", icon: Share2, roles: ["employee", "manager", "admin"] },
+  {
+    to: "/shared-goals",
+    label: "Shared Goals",
+    icon: Share2,
+    roles: ["employee", "manager", "admin"],
+  },
   { to: "/analytics", label: "Analytics", icon: BarChart3, roles: ["manager", "admin"] },
   { to: "/org", label: "Organization", icon: Building2, roles: ["admin"] },
   { to: "/cycles", label: "Goal Cycles", icon: CalendarRange, roles: ["admin"] },
-  { to: "/escalations", label: "Escalations", icon: AlertTriangle, roles: ["manager", "admin"], badge: "2" },
+  {
+    to: "/escalations",
+    label: "Escalations",
+    icon: AlertTriangle,
+    roles: ["manager", "admin"],
+    badge: "2",
+  },
   { to: "/audit", label: "Audit Trail", icon: ShieldCheck, roles: ["admin"] },
 ];
 
@@ -77,7 +124,11 @@ export function AppShell() {
   }
 
   const items = NAV.filter((n) => n.roles.includes(user.role));
-  const initials = user.name.split(" ").map((p) => p[0]).slice(0, 2).join("");
+  const initials = user.name
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("");
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -93,7 +144,9 @@ export function AppShell() {
             </div>
             <div>
               <p className="text-sm font-semibold leading-none">Ngage</p>
-              <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Goals Portal</p>
+              <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                Goals Portal
+              </p>
             </div>
           </div>
 
@@ -102,15 +155,21 @@ export function AppShell() {
               onClick={() => setCmdOpen(true)}
               className="flex w-full items-center justify-between rounded-xl border border-sidebar-border bg-background/40 px-3 py-2 text-xs text-muted-foreground transition hover:bg-background"
             >
-              <span className="flex items-center gap-2"><Search className="size-3.5" /> Search…</span>
+              <span className="flex items-center gap-2">
+                <Search className="size-3.5" /> Search…
+              </span>
               <kbd className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">⌘K</kbd>
             </button>
           </div>
 
           <nav className="mt-4 flex-1 space-y-0.5 overflow-y-auto scrollbar-thin px-2 pb-4">
-            <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Workspace</p>
+            <p className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              Workspace
+            </p>
             {items.map((item) => {
-              const active = loc.pathname === item.to || (item.to !== "/dashboard" && loc.pathname.startsWith(item.to));
+              const active =
+                loc.pathname === item.to ||
+                (item.to !== "/dashboard" && loc.pathname.startsWith(item.to));
               return (
                 <Link
                   key={item.to}
@@ -145,11 +204,15 @@ export function AppShell() {
           <div className="border-t border-sidebar-border p-3">
             <div className="flex items-center gap-3 rounded-xl bg-sidebar-accent/50 p-2.5">
               <Avatar className="size-9">
-                <AvatarFallback className="gradient-primary text-xs font-semibold text-white">{initials}</AvatarFallback>
+                <AvatarFallback className="gradient-primary text-xs font-semibold text-white">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium leading-tight">{user.name}</p>
-                <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">{roleAccent(user.role)}</p>
+                <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
+                  {roleAccent(user.role)}
+                </p>
               </div>
             </div>
           </div>
@@ -173,7 +236,13 @@ export function AppShell() {
                 </div>
               </div>
               <div className="ml-auto flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="rounded-xl" onClick={toggle} aria-label="Toggle theme">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-xl"
+                  onClick={toggle}
+                  aria-label="Toggle theme"
+                >
                   <AnimatePresence mode="wait" initial={false}>
                     <motion.span
                       key={theme}
@@ -191,7 +260,11 @@ export function AppShell() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/60 px-2 py-1.5 text-sm transition hover:bg-background">
-                      <Avatar className="size-7"><AvatarFallback className="gradient-primary text-[10px] text-white">{initials}</AvatarFallback></Avatar>
+                      <Avatar className="size-7">
+                        <AvatarFallback className="gradient-primary text-[10px] text-white">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
                       <span className="hidden md:inline">{user.name.split(" ")[0]}</span>
                     </button>
                   </DropdownMenuTrigger>
@@ -203,11 +276,25 @@ export function AppShell() {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem><FileText className="mr-2 size-4" />My profile</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCmdOpen(true)}><Command className="mr-2 size-4" />Command palette</DropdownMenuItem>
+                    <Link to="/profile">
+                      <DropdownMenuItem className="cursor-pointer">
+                        <FileText className="mr-2 size-4" />
+                        My profile
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem onClick={() => setCmdOpen(true)}>
+                      <Command className="mr-2 size-4" />
+                      Command palette
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => { logout(); nav({ to: "/login" }); }}>
-                      <LogOut className="mr-2 size-4" />Sign out
+                    <DropdownMenuItem
+                      onClick={() => {
+                        logout();
+                        nav({ to: "/login" });
+                      }}
+                    >
+                      <LogOut className="mr-2 size-4" />
+                      Sign out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -220,7 +307,14 @@ export function AppShell() {
             {items.slice(0, 5).map((it) => {
               const active = loc.pathname === it.to;
               return (
-                <Link key={it.to} to={it.to} className={cn("flex flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[10px]", active ? "text-primary" : "text-muted-foreground")}>
+                <Link
+                  key={it.to}
+                  to={it.to}
+                  className={cn(
+                    "flex flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[10px]",
+                    active ? "text-primary" : "text-muted-foreground",
+                  )}
+                >
                   <it.icon className="size-4" />
                   {it.label.split(" ")[0]}
                 </Link>
@@ -261,16 +355,38 @@ export function AppShell() {
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Navigate">
             {items.map((it) => (
-              <CommandItem key={it.to} onSelect={() => { setCmdOpen(false); nav({ to: it.to }); }}>
+              <CommandItem
+                key={it.to}
+                onSelect={() => {
+                  setCmdOpen(false);
+                  nav({ to: it.to });
+                }}
+              >
                 <it.icon className="mr-2 size-4" /> {it.label}
               </CommandItem>
             ))}
           </CommandGroup>
           <CommandGroup heading="Quick actions">
-            <CommandItem onSelect={() => { setCmdOpen(false); toggle(); }}>
-              {theme === "dark" ? <Sun className="mr-2 size-4" /> : <Moon className="mr-2 size-4" />} Toggle theme
+            <CommandItem
+              onSelect={() => {
+                setCmdOpen(false);
+                toggle();
+              }}
+            >
+              {theme === "dark" ? (
+                <Sun className="mr-2 size-4" />
+              ) : (
+                <Moon className="mr-2 size-4" />
+              )}{" "}
+              Toggle theme
             </CommandItem>
-            <CommandItem onSelect={() => { setCmdOpen(false); logout(); nav({ to: "/login" }); }}>
+            <CommandItem
+              onSelect={() => {
+                setCmdOpen(false);
+                logout();
+                nav({ to: "/login" });
+              }}
+            >
               <LogOut className="mr-2 size-4" /> Sign out
             </CommandItem>
           </CommandGroup>
@@ -281,13 +397,28 @@ export function AppShell() {
 }
 
 function NotificationBell() {
-  const unread = notifications.length;
+  const queryClient = useQueryClient();
+  const { data: alerts = [] } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: notificationsApi.getNotifications,
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: () => notificationsApi.markRead(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+  });
+
+  const unreadList = alerts.filter((n: any) => !n.read);
+  const unreadCount = unreadList.length;
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative rounded-xl">
           <Bell className="size-4" />
-          {unread > 0 && (
+          {unreadCount > 0 && (
             <span className="absolute right-1.5 top-1.5 flex size-2">
               <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-75" />
               <span className="relative size-2 rounded-full bg-primary" />
@@ -299,27 +430,48 @@ function NotificationBell() {
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div>
             <p className="text-sm font-semibold">Notifications</p>
-            <p className="text-xs text-muted-foreground">{unread} new updates</p>
+            <p className="text-xs text-muted-foreground">{unreadCount} new updates</p>
           </div>
-          <Button size="sm" variant="ghost">Mark all read</Button>
+          {unreadCount > 0 && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => markAllReadMutation.mutate()}
+              disabled={markAllReadMutation.isPending}
+            >
+              Mark all read
+            </Button>
+          )}
         </div>
         <div className="max-h-96 overflow-y-auto scrollbar-thin">
-          {notifications.map((n) => (
-            <div key={n.id} className="flex gap-3 border-b px-4 py-3 last:border-b-0 hover:bg-accent/40">
-              <div className={cn(
-                "mt-1 size-2 shrink-0 rounded-full",
-                n.type === "success" && "bg-success",
-                n.type === "warning" && "bg-warning",
-                n.type === "info" && "bg-info",
-                n.type === "approval" && "bg-primary",
-              )} />
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium">{n.title}</p>
-                <p className="line-clamp-2 text-xs text-muted-foreground">{n.body}</p>
-                <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">{new Date(n.ts).toLocaleString()}</p>
-              </div>
+          {alerts.length === 0 ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">
+              No notifications yet.
             </div>
-          ))}
+          ) : (
+            alerts.map((n: any) => (
+              <div
+                key={n.id}
+                className={cn(
+                  "flex gap-3 border-b px-4 py-3 last:border-b-0 hover:bg-accent/40",
+                  !n.read && "bg-primary/[0.02]"
+                )}
+              >
+                <div
+                  className={cn(
+                    "mt-1.5 size-2 shrink-0 rounded-full",
+                    !n.read ? "bg-primary shadow-glow" : "bg-muted-foreground/30"
+                  )}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium">{n.message}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {new Date(n.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </PopoverContent>
     </Popover>
