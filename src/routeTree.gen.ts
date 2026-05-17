@@ -12,8 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTeamRouteImport } from './routes/_app/team'
 import { Route as AppGoalsRouteImport } from './routes/_app/goals'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppCheckinsRouteImport } from './routes/_app/checkins'
+import { Route as AppApprovalsRouteImport } from './routes/_app/approvals'
+import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -29,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGoalsRoute = AppGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -39,33 +48,86 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCheckinsRoute = AppCheckinsRouteImport.update({
+  id: '/checkins',
+  path: '/checkins',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppApprovalsRoute = AppApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/analytics': typeof AppAnalyticsRoute
+  '/approvals': typeof AppApprovalsRoute
+  '/checkins': typeof AppCheckinsRoute
   '/dashboard': typeof AppDashboardRoute
   '/goals': typeof AppGoalsRoute
+  '/team': typeof AppTeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/analytics': typeof AppAnalyticsRoute
+  '/approvals': typeof AppApprovalsRoute
+  '/checkins': typeof AppCheckinsRoute
   '/dashboard': typeof AppDashboardRoute
   '/goals': typeof AppGoalsRoute
+  '/team': typeof AppTeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
+  '/_app/analytics': typeof AppAnalyticsRoute
+  '/_app/approvals': typeof AppApprovalsRoute
+  '/_app/checkins': typeof AppCheckinsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/goals': typeof AppGoalsRoute
+  '/_app/team': typeof AppTeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/goals'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/analytics'
+    | '/approvals'
+    | '/checkins'
+    | '/dashboard'
+    | '/goals'
+    | '/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/goals'
-  id: '__root__' | '/' | '/_app' | '/login' | '/_app/dashboard' | '/_app/goals'
+  to:
+    | '/'
+    | '/login'
+    | '/analytics'
+    | '/approvals'
+    | '/checkins'
+    | '/dashboard'
+    | '/goals'
+    | '/team'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/login'
+    | '/_app/analytics'
+    | '/_app/approvals'
+    | '/_app/checkins'
+    | '/_app/dashboard'
+    | '/_app/goals'
+    | '/_app/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/team': {
+      id: '/_app/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/goals': {
       id: '/_app/goals'
       path: '/goals'
@@ -111,17 +180,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/checkins': {
+      id: '/_app/checkins'
+      path: '/checkins'
+      fullPath: '/checkins'
+      preLoaderRoute: typeof AppCheckinsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/approvals': {
+      id: '/_app/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof AppApprovalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/analytics': {
+      id: '/_app/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAnalyticsRoute: typeof AppAnalyticsRoute
+  AppApprovalsRoute: typeof AppApprovalsRoute
+  AppCheckinsRoute: typeof AppCheckinsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppGoalsRoute: typeof AppGoalsRoute
+  AppTeamRoute: typeof AppTeamRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAnalyticsRoute: AppAnalyticsRoute,
+  AppApprovalsRoute: AppApprovalsRoute,
+  AppCheckinsRoute: AppCheckinsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppGoalsRoute: AppGoalsRoute,
+  AppTeamRoute: AppTeamRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
